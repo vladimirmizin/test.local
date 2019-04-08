@@ -21,5 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::post('comment/add', 'Login\CommentController@store')->name('add_comment');
+    Route::post('comment/add', 'CommentController@store')->name('add_comment');
 });

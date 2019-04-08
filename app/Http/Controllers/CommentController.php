@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Login;
+namespace App\Http\Controllers;
 
-use App\Comment;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -41,7 +41,7 @@ class CommentController extends Controller
         $input['body'] = $request->get('body');
 
         Comment::create( $input );
-        return back()->with('message', 'Comment published');
+        return back();
     }
 
     /**
