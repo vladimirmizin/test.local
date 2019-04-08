@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form method="post" action="{!! route('add_comment') !!}">
                         {!! csrf_field() !!}
-                        <p>Заголовок<br>
+                        <p>Тема<br>
                         <input class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" name="title">
                             @if ($errors->has('title'))
                                 <span class="invalid-feedback" role="alert">
