@@ -54,9 +54,8 @@
                                                     {!! csrf_field() !!}
                                                     <br>
                                                     <p>Комментарий:<br>
-                                                        <textarea
-                                                                class="form-control {{ $errors->has('body') ? ' is-invalid' : '' }}"
-                                                                name="body">{!! old('body') !!}
+                                                        <textarea class="form-control {{ $errors->has('body') ? ' is-invalid' : '' }}" name="body">
+                                                            {!! old('body') !!}
                                                         </textarea>
                                                         @if ($errors->has('body'))
                                                             <span class="invalid-feedback" role="alert">

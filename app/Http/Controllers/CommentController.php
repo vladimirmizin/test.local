@@ -92,7 +92,7 @@ class CommentController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    protected function update(Request $request, $id)
     {
         $comment = Comment::find($id);
         if (($comment->user_id == auth()->user()->id )&& ((Carbon::now()->subMinutes(60)->lt($comment->created_at)))) {
@@ -114,7 +114,7 @@ class CommentController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    protected function destroy(Request $request, $id)
     {
         $comment = Comment::find($id);
         if ($comment && ($comment->user_id == $request->user()->id )) {
