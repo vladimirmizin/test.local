@@ -7,13 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     protected $fillable = [
-        'from_user',
+        'user_id',
         'title',
         'body'
 
     ];
+
     public function author()
     {
-        return $this->belongsTo('App\User','from_user');
+        return $this->belongsTo(User::class,'user_id');
     }
+    public function branch()
+    {
+        return $this->belongsToMany(Branch::class,'branch_comments','comment_id','branch_id');
+    }
+
 }

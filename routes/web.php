@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-
     Route::post('comment/add', 'CommentController@store')->name('add_comment');
+    Route::get('delete/{id}', 'CommentController@destroy')->name('destroy_comment');
+    Route::get('edit/{id}', 'CommentController@edit')->name('edit_comment');
+    Route::post('update/{id}', 'CommentController@update')->name('comment.update');
 });

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4731429c7f25ab92eaa813447a972209",
+    "content-hash": "82c9b8fc8ca503212e3c43d25706199b",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -458,6 +458,55 @@
             ],
             "description": "Highlight PHP code in terminal",
             "time": "2018-09-29T18:48:56+00:00"
+        },
+        {
+            "name": "klisl/laravel-comments",
+            "version": "1.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/klisl/laravel-comments.git",
+                "reference": "13993c6ed1398f70799c3920fea5677acda19d12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/klisl/laravel-comments/zipball/13993c6ed1398f70799c3920fea5677acda19d12",
+                "reference": "13993c6ed1398f70799c3920fea5677acda19d12",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Klisl\\Comments\\CommentsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Klisl\\Comments\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Klimenchuk",
+                    "email": "ksl80@ukr.net",
+                    "homepage": "https://github.com/klisl/laravel-comments",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Package for using comments in Laravel-5",
+            "keywords": [
+                "comments",
+                "laravel"
+            ],
+            "time": "2018-04-03T13:00:43+00:00"
         },
         {
             "name": "laravel/framework",
