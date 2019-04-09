@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">Редактировать комментарий</div>
                     <div class="card-body">
-                        <form method="post" action="">
+                        <form method="post" action="{!! route('update_comment', ['id' => $comment->id]); !!}">
                             {!! csrf_field() !!}
                             <p>Тема<br>
                                 <input class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}"

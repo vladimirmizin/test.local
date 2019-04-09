@@ -30,7 +30,7 @@ class CommentController extends Controller
         //
     }
 
-    public function store(Request $request)
+    protected function store(Request $request)
     {
         $this->validate($request, [
             'title' => 'required|min:3|string',
@@ -44,7 +44,17 @@ class CommentController extends Controller
         Comment::create($input);
         return back();
     }
-
+    protected function addSubComment (Request $request, $parent_id, $title) {
+        $this->validate($request, [
+            'body' => 'required|min:1',
+        ]);
+        $input['user_id'] = $request->user()->id;
+        $input['title'] = $title;
+        $input['body'] = $request->get('body');
+        $input['parent_id'] = $parent_id;
+        Comment::create($input);
+        return back();
+    }
     /**
      * Display the specified resource.
      *
@@ -62,10 +72,17 @@ class CommentController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    protected function edit($id)
     {
         $comment = Comment::find($id);
-        return view('edit')->with('comment', $comment);
+        if ((Carbon::now()->subMinutes(60)->lt($comment->created_at))){
+            return view('edit')->with('comment', $comment);
+        }
+        else{
+            return back();
+        }
+
+
     }
 
     /**
@@ -78,7 +95,11 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        if ($comment && ($comment->user_id == auth()->user()->id )) {
+        if (($comment->user_id == auth()->user()->id )&& ((Carbon::now()->subMinutes(60)->lt($comment->created_at)))) {
+            $this->validate($request, [
+                'title' => 'required|min:3|string',
+                'body' => 'required|min:1'
+            ]);
             $comment->title = $request->get('title');
             $comment->body = $request->get('body');
             $comment->save();
