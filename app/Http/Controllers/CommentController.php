@@ -36,8 +36,10 @@ class CommentController extends Controller
             'title' => 'required|min:3|string',
             'body' => 'required|min:1',
         ]);
-        $path = $request->file('image')->store('uploads','public');
-        $input['image'] = $path;
+        if($request->file('image')!= null) {
+            $path = $request->file('image')->store('uploads', 'public');
+            $input['image'] = $path;
+        }
         $input['user_id'] = $request->user()->id;
         $input['title'] = $request->get('title');
         $input['body'] = $request->get('body');
@@ -51,9 +53,10 @@ class CommentController extends Controller
         $this->validate($request, [
             'sub_body' => 'required|min:1',
         ]);
-
-        $path = $request->file('image')->store('uploads','public');
-        $input['image'] = $path;
+        if($request->file('image')!= null) {
+            $path = $request->file('image')->store('uploads', 'public');
+            $input['image'] = $path;
+        }
         $input['user_id'] = $request->user()->id;
         $input['title'] = $title;
         $input['body'] = $request->get('sub_body');
@@ -83,11 +86,10 @@ class CommentController extends Controller
     {
         /** @var Comment $comment */
         $comment = Comment::find($id);
-        if (($comment->canBeModifies())&&($comment->user_id == auth()->user()->id)) {
+        if (($comment->canBeModifies()) && ($comment->user_id == auth()->user()->id)) {
             return view('edit')->with('comment', $comment);
         }
         return back()->withErrors('Cannot be modified');
-
 
 
     }
@@ -102,7 +104,7 @@ class CommentController extends Controller
     protected function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        if (($comment->canBeModifies())&&($comment->user_id == auth()->user()->id)) {
+        if (($comment->canBeModifies()) && ($comment->user_id == auth()->user()->id)) {
             $this->validate($request, [
                 'title' => 'required|min:3|string',
                 'body' => 'required|min:1'

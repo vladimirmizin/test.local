@@ -16,6 +16,7 @@ class CreateTownTable extends Migration
         Schema::create('town', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('town');
+            $table->integer('region_id');
             $table->timestamps();
         });
     }
