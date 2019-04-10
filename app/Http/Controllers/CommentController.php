@@ -36,7 +36,8 @@ class CommentController extends Controller
             'title' => 'required|min:3|string',
             'body' => 'required|min:1',
         ]);
-
+        $path = $request->file('image')->store('uploads','public');
+        $input['image'] = $path;
         $input['user_id'] = $request->user()->id;
         $input['title'] = $request->get('title');
         $input['body'] = $request->get('body');
@@ -44,17 +45,23 @@ class CommentController extends Controller
         Comment::create($input);
         return back();
     }
-    protected function addSubComment (Request $request, $parent_id, $title) {
+
+    protected function addSubComment(Request $request, $parent_id, $title)
+    {
         $this->validate($request, [
-            'body' => 'required|min:1',
+            'sub_body' => 'required|min:1',
         ]);
+
+        $path = $request->file('image')->store('uploads','public');
+        $input['image'] = $path;
         $input['user_id'] = $request->user()->id;
         $input['title'] = $title;
-        $input['body'] = $request->get('body');
+        $input['body'] = $request->get('sub_body');
         $input['parent_id'] = $parent_id;
         Comment::create($input);
         return back();
     }
+
     /**
      * Display the specified resource.
      *
@@ -74,13 +81,13 @@ class CommentController extends Controller
      */
     protected function edit($id)
     {
+        /** @var Comment $comment */
         $comment = Comment::find($id);
-        if ((Carbon::now()->subMinutes(60)->lt($comment->created_at))){
+        if (($comment->canBeModifies())&&($comment->user_id == auth()->user()->id)) {
             return view('edit')->with('comment', $comment);
         }
-        else{
-            return back();
-        }
+        return back()->withErrors('Cannot be modified');
+
 
 
     }
@@ -95,7 +102,7 @@ class CommentController extends Controller
     protected function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        if (($comment->user_id == auth()->user()->id )&& ((Carbon::now()->subMinutes(60)->lt($comment->created_at)))) {
+        if (($comment->canBeModifies())&&($comment->user_id == auth()->user()->id)) {
             $this->validate($request, [
                 'title' => 'required|min:3|string',
                 'body' => 'required|min:1'
@@ -104,7 +111,7 @@ class CommentController extends Controller
             $comment->body = $request->get('body');
             $comment->save();
         }
-            return redirect('home');
+        return redirect('home');
 
     }
 
@@ -117,7 +124,7 @@ class CommentController extends Controller
     protected function destroy(Request $request, $id)
     {
         $comment = Comment::find($id);
-        if ($comment && ($comment->user_id == $request->user()->id )) {
+        if ($comment && ($comment->user_id == $request->user()->id)) {
             $comment->delete();
         }
         return redirect('home');

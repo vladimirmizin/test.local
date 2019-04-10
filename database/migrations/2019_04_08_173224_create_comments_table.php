@@ -20,6 +20,7 @@ class CreateCommentsTable extends Migration
             $table->text('body');
             $table->unsignedInteger('parent_id')->nullable();
             $table->timestamps();
+            $table->string('image') -> nullable();
 
             $table->foreign('user_id')
                 ->references('id')->on('users')
