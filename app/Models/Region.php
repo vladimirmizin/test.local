@@ -14,4 +14,5 @@ class Region extends Model
     {
         return $this->hasMany(City::class);
     }
+
 }

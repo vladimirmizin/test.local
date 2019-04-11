@@ -32,6 +32,12 @@ class RegisterController extends Controller
      *
      * @var string
      */
+    public function getIndex()
+    {
+        $countries = Country::all();
+        return view('auth/register', ['countries' => $countries]);
+    }
+
     protected $redirectTo = '/home';
 
     /**
@@ -42,6 +48,10 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+        $countries = Country::getCountries();
+        return view('auth/register', ['countries' => $countries]);
+
     }
 
     /**
@@ -59,11 +69,6 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function getCountries()
-    {
-        $countries = Country::all();
-        return view('auth/register', ['countries' => $countries]);
-    }
 
     /**
      * Create a new user instance after a valid registration.
@@ -83,6 +88,8 @@ class RegisterController extends Controller
 
     protected function getRegions(Request $request)
     {
+        $result = 'Hello';
+        return $result;
         $country_id = Region::where($request->get('country_id'), 'country_id')->get();
         dd($request->get('country_id'));
 

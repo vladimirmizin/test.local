@@ -10,4 +10,9 @@ class Country extends Model
     {
         return $this->hasMany(Region::class);
     }
+    public static function getCountries()
+    {
+        $countries = Country::all();
+        return view('auth/register', ['country' => $countries]);
+    }
 }

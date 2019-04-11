@@ -15,30 +15,13 @@
             $('#region_id').attr('disabled', true);
             $('#region_id').html('<option>загрузка...</option>');
 
-            var url = 'get_regions.php';
+            var url = 'get-regions';
 
             $.get(
                 url,
-                "country_id=" + country_id,
+                {country_id : country_id},
                 function (result) {
-                    if (result.type == 'error') {
-                        alert('error');
-                        return(false);
-                    }
-                    else {
-
-                        var options = '';
-
-                        $(result.regions).each(function() {
-
-                            options += '<option value="' + $(this).attr('region_id') + '">' + $(this).attr('name') + '</option>';
-                        });
-
-                        $('#region_id').html('<option value="0">- выберите регион -</option>'+options);
-                        $('#region_id').attr('disabled', false);
-                        $('#city_id').html('<option>- выберите город -</option>');
-                        $('#city_id').attr('disabled', true);
-                    }
+                   console.log(result, '123');
                 },
                 "json"
             );
@@ -54,7 +37,7 @@
             }
             $('#city_id').attr('disabled', true);
             $('#city_id').html('<option>загрузка...</option>');
-            var url = 'get_city.php';
+            var url = 'get-city';
             $.get(
                 url,
                 "region_id=" + region_id,

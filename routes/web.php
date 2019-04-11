@@ -18,7 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
+Route::get('/register', 'Auth\registerController@getIndex')->name('register');
+Route::get('/get-regions','Auth\RegisterController@getRegions')->name('get_regions');
 Route::group(['middleware' => ['auth']], function () {
     Route::post('comment/add', 'CommentController@store')->name('add_comment');
     Route::get('delete/{id}', 'CommentController@destroy')->name('destroy_comment');
@@ -26,7 +27,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('update/{id}', 'CommentController@update')->name('update_comment');
     Route::post('add-sub-comment/{parent_comment_id?}/{title?}', 'CommentController@addSubComment')->name('add_sub_comment');
     Route::get('countries', 'Auth/RegisterController@countries')->name('countries');
-    Route::get('region/{region_id}','Auth/RegisterController@get_regions')->name('get_regions');
-    Route::get('city/{city_id}','Auth/RegisterController@get_city')->name('get_city');
+    Route::get('city','Auth/RegisterController@getCity')->name('get_city');
 
 });
