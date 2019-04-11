@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\City;
 use App\Models\Comment;
 use App\Models\Country;
 use App\Models\Region;
@@ -48,10 +49,6 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-
-        $countries = Country::getCountries();
-        return view('auth/register', ['countries' => $countries]);
-
     }
 
     /**
@@ -79,37 +76,27 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'city_id' => $data['city_id']
+            ]);
+
     }
 
     protected function getRegions(Request $request)
     {
-        $result = 'Hello';
-        return $result;
-        $country_id = Region::where($request->get('country_id'), 'country_id')->get();
-        dd($request->get('country_id'));
+        $regions = Region::where('country_id', $request->get('country_id'))->get();
 
-        if ($regs) {
-            $num = mysql_num_rows($regs);
-            $i = 0;
-            while ($i < $num) {
-                $regions[$i] = mysql_fetch_assoc($regs);
-                $i++;
-            }
-            $result = array('regions' => $regions);
-        } else {
-            $result = array('type' => 'error');
-        }
-        print json_encode($result);
-
+        return response()->json(['regions' => $regions]);
     }
 
-    protected function getCity(Request $request, $region_id)
+    protected function getCities(Request $request)
     {
+        $cities = City::where('region_id', $request->get('region_id'))->get();
 
+        return response()->json(['cities' => $cities]);
     }
 }

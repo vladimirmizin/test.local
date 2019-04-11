@@ -20,12 +20,12 @@ class Comment extends Model
 
     public function author()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function branch()
     {
-        return $this->belongsToMany(Branch::class,'branch_comments','comment_id','branch_id');
+        return $this->belongsToMany(Branch::class, 'branch_comments', 'comment_id', 'branch_id');
     }
 
     /**
@@ -34,5 +34,11 @@ class Comment extends Model
     public function canBeModifies()
     {
         return Carbon::now()->subMinutes(60)->lt($this->created_at);
+    }
+
+    public function sub_comments()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')
+            ->orderByDesc('created_at');
     }
 }

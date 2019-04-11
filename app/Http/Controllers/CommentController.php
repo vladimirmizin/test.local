@@ -36,14 +36,13 @@ class CommentController extends Controller
             'title' => 'required|min:3|string',
             'body' => 'required|min:1',
         ]);
-        if($request->file('image')!= null) {
+        if ($request->file('image') != null) {
             $path = $request->file('image')->store('uploads', 'public');
             $input['image'] = $path;
         }
         $input['user_id'] = $request->user()->id;
         $input['title'] = $request->get('title');
         $input['body'] = $request->get('body');
-
         Comment::create($input);
         return back();
     }
@@ -53,7 +52,7 @@ class CommentController extends Controller
         $this->validate($request, [
             'sub_body' => 'required|min:1',
         ]);
-        if($request->file('image')!= null) {
+        if ($request->file('image') != null) {
             $path = $request->file('image')->store('uploads', 'public');
             $input['image'] = $path;
         }

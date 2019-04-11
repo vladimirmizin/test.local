@@ -24,9 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $comments = Comment::with('author')->whereNull('parent_id')->get();
-        $subComments = Comment::with('author')->whereNotNull('parent_id')->get();
-        return view('home', compact('comments', 'subComments'));
+
+        $comments = Comment::with(['author', 'sub_comments'])->whereNull('parent_id')->get();
+        return view('home', compact('comments'));
 
     }
 }

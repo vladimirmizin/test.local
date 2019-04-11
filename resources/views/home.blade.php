@@ -14,7 +14,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Комментарии</div><script type="text/javascript"> $(document).ready(function(){ alert(jQuery.fn.jquery); }); </script>
+                    <div class="card-header">Комментарии</div>
                     <div class="card-body">
                         <form method="post" action="{!! route('add_comment') !!}" enctype="multipart/form-data">
                             {!! csrf_field() !!}
@@ -43,7 +43,7 @@
                             </button>
                         </form>
                         <hr>
-                        @if(isset($comments))
+                        @if($comments->count() > 0)
                             <ul style="list-style: none; padding: 0">
                                 @foreach($comments as $comment)
                                     <li class="panel-body">
@@ -67,7 +67,8 @@
                                                     @endif
                                                 </div>
                                                 <a href=""
-                                                   onclick="openbox('{{$comment->id}}'); return false">Показать</a>
+                                                   onclick="openbox('{{$comment->id}}'); return false">Оставить
+                                                    комментарий</a>
                                                 <form method="post" id="{{$comment->id}}" style="display:none;"
                                                       action="{!! route('add_sub_comment', ['parent_id' => $comment->id, 'title' => $comment->title]); !!}"
                                                       enctype="multipart/form-data"
@@ -94,40 +95,67 @@
                                                     </button>
                                                 </form>
                                                 <hr>
-                                                @if(isset($subComments))
-                                                    <ul style="list-style: none; padding: 0">
-                                                        @foreach($subComments as $subComment)
-                                                            @if(($subComment->parent_id == $comment->id))
-                                                                <li class="panel-body">
-                                                                    <div class="form-group">
-                                                                        <div class="list-group-item">
-                                                                            <div class="">
-                                                                                <h4>{{ $subComment->body }}</h4>
-                                                                            </div>
-                                                                            @isset($subComment->image)
-                                                                                <p style="font-style: italic">file:
-                                                                                    storage/public/{{$subComment->image}}</p>
-                                                                            @endif
-                                                                            <hr>
-                                                                            <p>created
-                                                                                by: {{ $subComment->author->name }}
-                                                                                , {{ $subComment->created_at->format('M d,Y \a\t h:i a') }}</p>
-                                                                            @if($subComment->user_id == auth()->user()->id)
-                                                                                <a href="{!! route('destroy_comment', ['id' => $subComment->id]); !!}">Удалить</a>
-                                                                                @if($subComment->canBeModifies())
-                                                                                    <a href="{!! route('edit_comment', ['id' => $subComment->id]); !!}">Редактировать</a>
-                                                                                @endif
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
+                                                @php
+                                                    $latestComment = $comment->sub_comments->first();
+                                                @endphp
+                                                @if (!is_null($latestComment))
+                                                    <div class="list-group-item">
+                                                        <div class="">
+                                                            <h4>{{ $latestComment->body }}</h4>
+                                                        </div>
+                                                        @isset($latestComment->image)
+                                                            <p style="font-style: italic">file:
+                                                                storage/public/{{$latestComment->image}}</p>
+                                                        @endif
+                                                        <hr>
+                                                        <p>created
+                                                            by: {{ $latestComment->author->name }}
+                                                            , {{ $latestComment->created_at->format('M d,Y \a\t h:i a') }}</p>
+                                                        @if($latestComment->user_id == auth()->user()->id)
+                                                            <a href="{!! route('destroy_comment', ['id' => $latestComment->id]); !!}">Удалить</a>
+                                                            @if($latestComment->canBeModifies())
+                                                                <a href="{!! route('edit_comment', ['id' => $latestComment->id]); !!}">Редактировать</a>
                                                             @endif
-                                                        @endforeach
-                                                    </ul>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                                @if($comment->sub_comments->count() > 1)
+                                                    <a href=""
+                                                       onclick="openbox('sub.{{$comment->id}}'); return false">Показать
+                                                        все</a>
+                                                    <div id="sub.{{$comment->id}}" style="display:none;">
+                                                        <ul style="list-style: none; padding: 0">
+                                                            @foreach($comment->sub_comments as $subComment)
+                                                                @if($latestComment->id != $subComment->id)
+                                                                    <div class="list-group-item">
+                                                                        <div class="">
+                                                                            <h4>{{ $subComment->body }}</h4>
+                                                                        </div>
+                                                                        @if (isset($subComment->image))
+                                                                            <p style="font-style: italic">file:
+                                                                                storage/public/{{$subComment->image}}</p>
+                                                                        @endif
+                                                                        <hr>
+                                                                        <p>created
+                                                                            by: {{ $subComment->author->name }}
+                                                                            , {{ $subComment->created_at->format('M d,Y \a\t h:i a') }}</p>
+                                                                        @if($subComment->user_id == auth()->user()->id)
+                                                                            <a href="{!! route('destroy_comment', ['id' => $subComment->id]); !!}">Удалить</a>
+                                                                            @if($subComment->canBeModifies())
+                                                                                <a href="{!! route('edit_comment', ['id' => $subComment->id]); !!}">Редактировать</a>
+                                                                            @endif
+                                                                        @endif
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
                                     </li>
+
+
                                 @endforeach
                             </ul>
                         @endif
