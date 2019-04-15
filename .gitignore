@@ -3,10 +3,9 @@
 /public/storage
 /storage/*.key
 /vendor
-/public/css/app.css
+/public/css
+/public/js
 /public/mix-manifest.json
-/public/favicon.ico
-/public/robots.txt
 public/hot
 storage/*.key
 .env.*.php
