@@ -111,7 +111,7 @@ class CommentController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    protected function destroy(Request $request, $id)
+    protected function destroy($id)
     {
         $comment = Comment::find($id);
         if ($comment->canBeDeleted()) {
