@@ -17,7 +17,6 @@ class Comment extends Model
         'created_at',
         'image',
         'url'
-
     ];
 
     public function author()
@@ -33,9 +32,9 @@ class Comment extends Model
     /**
      * @return bool
      */
-    public function canBeModified()
+    public function canBeModified($user_id)
     {
-        if (($this->user_id === auth()->user()->id) && (Carbon::now()->subMinutes(60)->lt($this->created_at))) {
+        if (($user_id === auth()->user()->id) && (Carbon::now()->subMinutes(60)->lt($this->created_at))) {
             return true;
         }
     }
@@ -78,7 +77,6 @@ class Comment extends Model
         $input['body'] = $request->get('sub_body' . $request->get('parent_id'));
         $input['title'] = $request->get('title');
         self::create($input);
-
     }
 
     public function hasImage()
@@ -94,6 +92,4 @@ class Comment extends Model
           return null;
         }
     }
-
-
 }

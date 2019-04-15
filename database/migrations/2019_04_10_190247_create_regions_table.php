@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use App\Models\Country;
 class CreateRegionsTable extends Migration
 {
     /**
@@ -20,10 +20,11 @@ class CreateRegionsTable extends Migration
             $table->timestamps();
 
         });
+        $country = Country::where('country', 'Украина')->first();
         DB::table('regions')->insert(
             array(
                 'region' => 'Полтавская',
-                'country_id' => '1'
+                'country_id' => $country->id
             )
         );
     }

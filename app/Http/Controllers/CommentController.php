@@ -45,7 +45,7 @@ class CommentController extends Controller
     protected function addSubComment(Request $request)
     {
         $this->validate($request, [
-            ('sub_body' . $request->get('parent_id'))  => 'required|min:1',
+            ('sub_body' . $request->get('parent_id')) => 'required|min:1',
         ]);
         Comment::addSubComment($request);
         return back();
@@ -72,7 +72,8 @@ class CommentController extends Controller
     {
         /** @var Comment $comment */
         $comment = Comment::find($id);
-        if ($comment->canBeModified()) {
+        $user_id = $comment->user_id;
+        if ($comment->canBeModified($user_id)) {
             return view('edit')->with('comment', $comment);
         }
         return back()->withErrors('Cannot be modified');
@@ -88,7 +89,8 @@ class CommentController extends Controller
     protected function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        if ($comment->canBeModified()) {
+        $user_id = $comment->user_id;
+        if ($comment->canBeModified($user_id)) {
             $this->validate($request, [
                 'title' => 'required|min:3|string',
                 'body' => 'required|min:1'
@@ -106,7 +108,6 @@ class CommentController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param int $id
      * @return \Illuminate\Http\Response
      */

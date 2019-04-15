@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use App\Models\Region;
 class CreateCitiesTable extends Migration
 {
     /**
@@ -19,10 +19,11 @@ class CreateCitiesTable extends Migration
             $table->integer('region_id');
             $table->timestamps();
         });
+        $region = Region::where('region', 'Полтавская')->first();
         DB::table('cities')->insert(
             array(
                 'city' => 'Кременчуг',
-                'region_id' => '1'
+                'region_id' => $region->id
             )
         );
     }

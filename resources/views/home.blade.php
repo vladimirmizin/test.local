@@ -60,7 +60,7 @@
                                                         , {{ $comment->created_at->format('M d,Y \a\t h:i a') }}</p>
                                                     @if($comment->user_id == auth()->user()->id)
                                                         <a href="{!! route('destroy_comment', ['id' => $comment->id]); !!}">Удалить</a>
-                                                        @if($comment->canBeModified())
+                                                        @if($comment->canBeModified($comment->user_id))
                                                             <a href="{!! route('edit_comment', ['id' => $comment->id]); !!}">Редактировать</a>
                                                         @endif
                                                     @endif
@@ -114,7 +114,7 @@
                                                             <h4>{{ $latestComment->body }}</h4>
                                                         </div>
                                                         @isset($latestComment->image)
-                                                        <a href="{{$latestComment->hasImage()}}" target="_blank">image</a>
+                                                            <a href="{{$latestComment->hasImage()}}" target="_blank">image</a>
                                                         @endif
                                                         <hr>
                                                         <p>created
@@ -122,7 +122,7 @@
                                                             , {{ $latestComment->created_at->format('M d,Y \a\t h:i a') }}</p>
                                                         @if($latestComment->user_id == auth()->user()->id)
                                                             <a href="{!! route('destroy_comment', ['id' => $latestComment->id]); !!}">Удалить</a>
-                                                            @if($latestComment->canBeModified())
+                                                            @if($latestComment->canBeModified($latestComment->user_id))
                                                                 <a href="{!! route('edit_comment', ['id' => $latestComment->id]); !!}">Редактировать</a>
                                                             @endif
                                                         @endif
@@ -141,7 +141,8 @@
                                                                             <h4>{{ $subComment->body }}</h4>
                                                                         </div>
                                                                         @isset($subComment->image)
-                                                                            <a href=" {{$subComment->hasImage()}}" target="_blank"
+                                                                            <a href=" {{$subComment->hasImage()}}"
+                                                                               target="_blank"
                                                                                style="font-style: italic">
                                                                                 image</a>
                                                                         @endif
@@ -151,7 +152,7 @@
                                                                             , {{ $subComment->created_at->format('M d,Y \a\t h:i a') }}</p>
                                                                         @if($subComment->user_id == auth()->user()->id)
                                                                             <a href="{!! route('destroy_comment', ['id' => $subComment->id]); !!}">Удалить</a>
-                                                                            @if($subComment->canBeModified())
+                                                                            @if($subComment->canBeModified($subComment->user_id))
                                                                                 <a href="{!! route('edit_comment', ['id' => $subComment->id]); !!}">Редактировать</a>
                                                                             @endif
                                                                         @endif
