@@ -19,6 +19,12 @@ class CreateCitiesTable extends Migration
             $table->integer('region_id');
             $table->timestamps();
         });
+        DB::table('cities')->insert(
+            array(
+                'city' => 'Кременчуг',
+                'region_id' => '1'
+            )
+        );
     }
 
     /**

@@ -2,6 +2,7 @@
 @section('content')
     <script type="text/javascript">
         function openbox(id) {
+            console.log(id, 'id');
             display = document.getElementById(id).style.display;
             if (display == 'none') {
                 document.getElementById(id).style.display = 'block';
@@ -29,7 +30,6 @@
                             <p>Комментарий:<br>
                                 <textarea class="form-control {{ $errors->has('body') ? ' is-invalid' : '' }}"
                                           name="body">{!! old('body') !!}
-
                             </textarea>
                                 @if ($errors->has('body'))
                                     <span class="invalid-feedback" role="alert">
@@ -53,15 +53,15 @@
                                                 <br>
                                                 <div class=list-group-item"><h4>{{ $comment->body }}</h4>
                                                     @isset($comment->image)
-                                                        <p style="font-style: italic">file:
-                                                            storage/public/{{$comment->image}}</p>
+                                                        <a href=" {{$comment->hasImage()}}" target="_blank"
+                                                           style="font-style: italic">image</a>
                                                     @endif
                                                     <hr>
                                                     <p>created by: {{ $comment->author->name }}
                                                         , {{ $comment->created_at->format('M d,Y \a\t h:i a') }}</p>
                                                     @if($comment->user_id == auth()->user()->id)
                                                         <a href="{!! route('destroy_comment', ['id' => $comment->id]); !!}">Удалить</a>
-                                                        @if($comment->canBeModifies())
+                                                        @if($comment->canBeModified())
                                                             <a href="{!! route('edit_comment', ['id' => $comment->id]); !!}">Редактировать</a>
                                                         @endif
                                                     @endif
@@ -69,31 +69,42 @@
                                                 <a href=""
                                                    onclick="openbox('{{$comment->id}}'); return false">Оставить
                                                     комментарий</a>
-                                                <form method="post" id="{{$comment->id}}" style="display:none;"
-                                                      action="{!! route('add_sub_comment', ['parent_id' => $comment->id, 'title' => $comment->title]); !!}"
-                                                      enctype="multipart/form-data"
-                                                >
-                                                    {!! csrf_field() !!}
-                                                    <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                                    <br>
-                                                    <p>Комментарий:<br>
-                                                        <textarea
-                                                                class="form-control {{ old('parent_id') == $comment->id && $errors->has('sub_body') ? ' is-invalid' : '' }}"
-                                                                name="sub_body">
-                                                            {!! old('sub_body') !!}
+                                                @php
+                                                    $subCommentDisplayState = "none";
+                                                @endphp
+                                                @if($errors->has('sub_body' . $comment->id))
+                                                    @php
+                                                        $subCommentDisplayState = 'block';
+                                                    @endphp
+                                                @endif
+                                                <div id="{{$comment->id}}" style="display: {{$subCommentDisplayState}}">
+                                                    <form method="post"
+                                                          action="{!! route('add_sub_comment'); !!}"
+                                                          enctype="multipart/form-data">
+                                                        {!! csrf_field() !!}
+                                                        <input type="hidden" name="parent_id"
+                                                               value="{{ $comment->id }}">
+                                                        <input type="hidden" name="title" value="{{ $comment->title }}">
+                                                        <br>
+                                                        <p>Комментарий:<br>
+                                                            <textarea
+                                                                    class="form-control {{ old('parent_id') == $comment->id && $errors->has('sub_body' . $comment->id) ? ' is-invalid' : '' }}"
+                                                                    name="{{('sub_body' . $comment->id)}}">
+                                                            {!! old('sub_body' . $comment->id) !!}
                                                         </textarea>
-                                                        @if (old('parent_id') == $comment->id && $errors->has('sub_body'))
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong>{{ $errors->first('sub_body') }}</strong>
+                                                            @if (old('parent_id') == $comment->id && $errors->has('sub_body' . $comment->id))
+                                                                <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $errors->first('sub_body' . $comment->id) }}</strong>
                                                             </span>
-                                                        @endif
-                                                    </p>
-                                                    <br>
-                                                    <input type="file" name="image">
-                                                    <button type="submit" class="btn btn-success"
-                                                            style="cursor:pointer;">Добавить комментарий
-                                                    </button>
-                                                </form>
+                                                            @endif
+                                                        </p>
+                                                        <br>
+                                                        <input type="file" name="image">
+                                                        <button type="submit" class="btn btn-success"
+                                                                style="cursor:pointer;">Добавить комментарий
+                                                        </button>
+                                                    </form>
+                                                </div>
                                                 <hr>
                                                 @php
                                                     $latestComment = $comment->sub_comments->first();
@@ -104,8 +115,7 @@
                                                             <h4>{{ $latestComment->body }}</h4>
                                                         </div>
                                                         @isset($latestComment->image)
-                                                            <p style="font-style: italic">file:
-                                                                storage/public/{{$latestComment->image}}</p>
+                                                        <a href="{{$latestComment->hasImage()}}" target="_blank">image</a>
                                                         @endif
                                                         <hr>
                                                         <p>created
@@ -113,7 +123,7 @@
                                                             , {{ $latestComment->created_at->format('M d,Y \a\t h:i a') }}</p>
                                                         @if($latestComment->user_id == auth()->user()->id)
                                                             <a href="{!! route('destroy_comment', ['id' => $latestComment->id]); !!}">Удалить</a>
-                                                            @if($latestComment->canBeModifies())
+                                                            @if($latestComment->canBeModified())
                                                                 <a href="{!! route('edit_comment', ['id' => $latestComment->id]); !!}">Редактировать</a>
                                                             @endif
                                                         @endif
@@ -131,9 +141,10 @@
                                                                         <div class="">
                                                                             <h4>{{ $subComment->body }}</h4>
                                                                         </div>
-                                                                        @if (isset($subComment->image))
-                                                                            <p style="font-style: italic">file:
-                                                                                storage/public/{{$subComment->image}}</p>
+                                                                        @isset($subComment->image)
+                                                                            <a href=" {{$subComment->hasImage()}}" target="_blank"
+                                                                               style="font-style: italic">
+                                                                                image</a>
                                                                         @endif
                                                                         <hr>
                                                                         <p>created
@@ -141,7 +152,7 @@
                                                                             , {{ $subComment->created_at->format('M d,Y \a\t h:i a') }}</p>
                                                                         @if($subComment->user_id == auth()->user()->id)
                                                                             <a href="{!! route('destroy_comment', ['id' => $subComment->id]); !!}">Удалить</a>
-                                                                            @if($subComment->canBeModifies())
+                                                                            @if($subComment->canBeModified())
                                                                                 <a href="{!! route('edit_comment', ['id' => $subComment->id]); !!}">Редактировать</a>
                                                                             @endif
                                                                         @endif
@@ -154,8 +165,6 @@
                                             </div>
                                         </div>
                                     </li>
-
-
                                 @endforeach
                             </ul>
                         @endif

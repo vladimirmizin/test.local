@@ -18,7 +18,14 @@ class CreateRegionsTable extends Migration
             $table->string('region');
             $table->integer('country_id');
             $table->timestamps();
+
         });
+        DB::table('regions')->insert(
+            array(
+                'region' => 'Полтавская',
+                'country_id' => '1'
+            )
+        );
     }
 
     /**

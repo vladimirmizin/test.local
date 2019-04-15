@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Comment extends Model
 {
@@ -14,7 +15,8 @@ class Comment extends Model
         'body',
         'parent_id',
         'created_at',
-        'image'
+        'image',
+        'url'
 
     ];
 
@@ -31,9 +33,18 @@ class Comment extends Model
     /**
      * @return bool
      */
-    public function canBeModifies()
+    public function canBeModified()
     {
-        return Carbon::now()->subMinutes(60)->lt($this->created_at);
+        if (($this->user_id === auth()->user()->id) && (Carbon::now()->subMinutes(60)->lt($this->created_at))) {
+            return true;
+        }
+    }
+
+    public function canBeDeleted()
+    {
+        if ($this->user_id === auth()->user()->id) {
+            return true;
+        }
     }
 
     public function sub_comments()
@@ -41,4 +52,49 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id')
             ->orderByDesc('created_at');
     }
+
+    public static function addComment($request)
+    {
+        if ($request->file('image') != null) {
+            $path = $request->file('image')->store('uploads', 'public');
+            $input['image'] = $path;
+        }
+        $input['user_id'] = $request->user()->id;
+        $input['parent_id'] = $request->get('parent_id');
+        $input['body'] = $request->get('body');
+        $input['title'] = $request->get('title');
+        self::create($input);
+
+    }
+
+    public static function addSubComment($request)
+    {
+        if ($request->file('image') != null) {
+            $path = $request->file('image')->store('uploads', 'public');
+            $input['image'] = $path;
+        }
+        $input['user_id'] = $request->user()->id;
+        $input['parent_id'] = $request->get('parent_id');
+        $input['body'] = $request->get('sub_body' . $request->get('parent_id'));
+        $input['title'] = $request->get('title');
+        self::create($input);
+
+    }
+
+    public function hasImage()
+    {
+        if ($this->image != null) {
+            $path = $this->image;
+            return $this->getStoragePath($path);
+        } else {
+            return null;
+        }
+    }
+
+    public function getStoragePath($path)
+    {
+        return Storage::url($path);
+    }
+
+
 }

@@ -6,7 +6,9 @@ use Carbon\Carbon;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Null_;
+
 
 class CommentController extends Controller
 {
@@ -36,31 +38,16 @@ class CommentController extends Controller
             'title' => 'required|min:3|string',
             'body' => 'required|min:1',
         ]);
-        if ($request->file('image') != null) {
-            $path = $request->file('image')->store('uploads', 'public');
-            $input['image'] = $path;
-        }
-        $input['user_id'] = $request->user()->id;
-        $input['title'] = $request->get('title');
-        $input['body'] = $request->get('body');
-        Comment::create($input);
+        Comment::addComment($request);
         return back();
     }
 
-    protected function addSubComment(Request $request, $parent_id, $title)
+    protected function addSubComment(Request $request)
     {
         $this->validate($request, [
-            'sub_body' => 'required|min:1',
+            ('sub_body' . $request->get('parent_id'))  => 'required|min:1',
         ]);
-        if ($request->file('image') != null) {
-            $path = $request->file('image')->store('uploads', 'public');
-            $input['image'] = $path;
-        }
-        $input['user_id'] = $request->user()->id;
-        $input['title'] = $title;
-        $input['body'] = $request->get('sub_body');
-        $input['parent_id'] = $parent_id;
-        Comment::create($input);
+        Comment::addSubComment($request);
         return back();
     }
 
@@ -85,12 +72,10 @@ class CommentController extends Controller
     {
         /** @var Comment $comment */
         $comment = Comment::find($id);
-        if (($comment->canBeModifies()) && ($comment->user_id == auth()->user()->id)) {
+        if ($comment->canBeModified()) {
             return view('edit')->with('comment', $comment);
         }
         return back()->withErrors('Cannot be modified');
-
-
     }
 
     /**
@@ -103,11 +88,15 @@ class CommentController extends Controller
     protected function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        if (($comment->canBeModifies()) && ($comment->user_id == auth()->user()->id)) {
+        if ($comment->canBeModified()) {
             $this->validate($request, [
                 'title' => 'required|min:3|string',
                 'body' => 'required|min:1'
             ]);
+            if ($request->has('image')) {
+                $path = $request->file('image')->store('uploads', 'public');
+                $comment->image = $path;
+            }
             $comment->title = $request->get('title');
             $comment->body = $request->get('body');
             $comment->save();
@@ -125,7 +114,7 @@ class CommentController extends Controller
     protected function destroy(Request $request, $id)
     {
         $comment = Comment::find($id);
-        if ($comment && ($comment->user_id == $request->user()->id)) {
+        if ($comment->canBeDeleted()) {
             $comment->delete();
         }
         return redirect('home');

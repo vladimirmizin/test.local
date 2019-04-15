@@ -17,7 +17,13 @@ class CreateCountriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('country');
             $table->timestamps();
+
         });
+        DB::table('countries')->insert(
+            array(
+                'country' => 'Украина'
+            )
+        );
     }
 
     /**

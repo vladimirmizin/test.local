@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">Редактировать комментарий</div>
                     <div class="card-body">
-                        <form method="post" action="{!! route('update_comment', ['id' => $comment->id]); !!}">
+                        <form method="post" action="{!! route('update_comment', ['id' => $comment->id]); !!}" enctype="multipart/form-data">
                             {!! csrf_field() !!}
                             <p>Тема<br>
                                 <input class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}"
@@ -26,6 +26,7 @@
                                         <strong>{{ $errors->first('body') }}</strong>
                                     </span>
                                 @endif
+                                <input type="file" name="image">
                             </p>
                             <br>
                             <button type="submit" class="btn btn-success" style="cursor:pointer;">Сохранить</button>
