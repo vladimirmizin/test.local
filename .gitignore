@@ -3,6 +3,11 @@
 /public/storage
 /storage/*.key
 /vendor
+/public/css/app.css
+/public/mix-manifest.json
+/public/favicon.ico
+/public/robots.txt
+
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

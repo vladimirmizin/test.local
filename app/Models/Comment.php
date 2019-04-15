@@ -83,17 +83,16 @@ class Comment extends Model
 
     public function hasImage()
     {
-        if ($this->image != null) {
-            $path = $this->image;
-            return $this->getStoragePath($path);
-        } else {
-            return null;
-        }
+        return !is_null($this->image);
     }
 
-    public function getStoragePath($path)
+    public function getStoragePath()
     {
-        return Storage::url($path);
+        if ($this->hasImage()) {
+            return Storage::url($this->image);
+        } else {
+          return null;
+        }
     }
 
 

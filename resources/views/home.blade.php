@@ -2,7 +2,6 @@
 @section('content')
     <script type="text/javascript">
         function openbox(id) {
-            console.log(id, 'id');
             display = document.getElementById(id).style.display;
             if (display == 'none') {
                 document.getElementById(id).style.display = 'block';
@@ -53,7 +52,7 @@
                                                 <br>
                                                 <div class=list-group-item"><h4>{{ $comment->body }}</h4>
                                                     @isset($comment->image)
-                                                        <a href=" {{$comment->hasImage()}}" target="_blank"
+                                                        <a href=" {{$comment->getStoragePath()}}" target="_blank"
                                                            style="font-style: italic">image</a>
                                                     @endif
                                                     <hr>
