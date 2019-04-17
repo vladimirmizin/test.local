@@ -66,9 +66,9 @@
                                                         @endif
                                                     @endif
                                                 </div>
-                                                <!--<a href=""
+                                              <a href=""
                                                    onclick="openbox('{{$comment->id}}'); return false" name="comment{{$comment->id}}">Оставить
-                                                    комментарий</a>-->
+                                                    комментарий</a>
 
                                                 @php
                                                     $subCommentDisplayState = "none";
