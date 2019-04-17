@@ -47,7 +47,8 @@
                                 @foreach($comments as $comment)
                                     <li class="panel-body">
                                         <div class="form-group">
-                                            <div class="list-group-item">
+                                        <a name="comment{{$comment->id}}"></a>
+                                            <div class="list-group-item" name="comment{{$comment->id}}">
                                                 <div class=""><h1>Тема: {{ $comment->title }}</h1></div>
                                                 <br>
                                                 <div class=list-group-item"><h4>{{ $comment->body }}</h4>
@@ -65,13 +66,14 @@
                                                         @endif
                                                     @endif
                                                 </div>
-                                                <a href=""
-                                                   onclick="openbox('{{$comment->id}}'); return false">Оставить
-                                                    комментарий</a>
+                                                <!--<a href=""
+                                                   onclick="openbox('{{$comment->id}}'); return false" name="comment{{$comment->id}}">Оставить
+                                                    комментарий</a>-->
+
                                                 @php
                                                     $subCommentDisplayState = "none";
                                                 @endphp
-                                                @if($errors->has('sub_body' . $comment->id))
+                                                @if($errors->has('sub_body' . $comment->id)|| request()->get('open') == $comment->id)
                                                     @php
                                                         $subCommentDisplayState = 'block';
                                                     @endphp
@@ -79,10 +81,12 @@
                                                 <div id="{{$comment->id}}" style="display: {{$subCommentDisplayState}}">
                                                     <form method="post"
                                                           action="{!! route('add_sub_comment'); !!}"
-                                                          enctype="multipart/form-data">
+                                                          enctype="multipart/form-data" >
+                                                      <!--  <a name="comment{{$comment->id}}"></a> -->
                                                         {!! csrf_field() !!}
                                                         <input type="hidden" name="parent_id"
                                                                value="{{ $comment->id }}">
+                                                        <input type="hidden" name="author_id" value="{{ $comment->user_id }}">
                                                         <input type="hidden" name="title" value="{{ $comment->title }}">
                                                         <br>
                                                         <p>Комментарий:<br>

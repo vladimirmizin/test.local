@@ -46,5 +46,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Town::class, 'city_id');
     }
+    public function aboutComments()
+    {
+        return $this->hasMany(AboutComment::class);
+    }
 
 }

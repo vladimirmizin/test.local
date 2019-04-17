@@ -16,7 +16,7 @@ class Comment extends Model
         'parent_id',
         'created_at',
         'image',
-        'url'
+        'if_send'
     ];
 
     public function author()

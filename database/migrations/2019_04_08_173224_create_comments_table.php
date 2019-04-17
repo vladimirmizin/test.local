@@ -22,6 +22,7 @@ class CreateCommentsTable extends Migration
             $table->timestamps();
             $table->string('image') -> nullable();
             $table->string('url') -> nullable();
+            $table->integer('if_send')->nullable();
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');

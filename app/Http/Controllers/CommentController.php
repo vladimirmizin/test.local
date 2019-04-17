@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AboutComment;
 use Carbon\Carbon;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Null_;
 
@@ -47,7 +49,13 @@ class CommentController extends Controller
         $this->validate($request, [
             ('sub_body' . $request->get('parent_id')) => 'required|min:1',
         ]);
-        Comment::addSubComment($request);
+        $result = Comment::addSubComment($request);
+        if($result == null){
+            $input['parent_comment_id'] = $request->get('parent_id');
+            $subComment = Comment::latest()->first();
+            $input['sub_comment_id'] = $subComment -> id;
+            AboutComment::create($input);
+        }
         return back();
     }
 
