@@ -1,14 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <script type="text/javascript">
-        function openbox(id) {
-            display = document.getElementById(id).style.display;
-            if (display == 'none') {
-                document.getElementById(id).style.display = 'block';
-            } else {
-                document.getElementById(id).style.display = 'none';
-            }
-        }
+        $(document).ready(function () {
+            $('.showbutton').on('click', function () {
+                $(this).siblings("#showblock").toggle("slow");
+            });
+        });
     </script>
     <div class="container">
         <div class="row justify-content-center">
@@ -47,7 +44,7 @@
                                 @foreach($comments as $comment)
                                     <li class="panel-body">
                                         <div class="form-group">
-                                        <a name="comment{{$comment->id}}"></a>
+                                            <a name="comment{{$comment->id}}"></a>
                                             <div class="list-group-item" name="comment{{$comment->id}}">
                                                 <div class=""><h1>Тема: {{ $comment->title }}</h1></div>
                                                 <br>
@@ -66,9 +63,9 @@
                                                         @endif
                                                     @endif
                                                 </div>
-                                              <a href=""
-                                                   onclick="openbox('{{$comment->id}}'); return false" name="comment{{$comment->id}}">Оставить
-                                                    комментарий</a>
+                                                <button href="" class="showbutton"
+                                                  >Оставить
+                                                    комментарий</button>
 
                                                 @php
                                                     $subCommentDisplayState = "none";
@@ -78,15 +75,16 @@
                                                         $subCommentDisplayState = 'block';
                                                     @endphp
                                                 @endif
-                                                <div id="{{$comment->id}}" style="display: {{$subCommentDisplayState}}">
+                                                <div id="showblock" style="display: {{$subCommentDisplayState}}">
                                                     <form method="post"
                                                           action="{!! route('add_sub_comment'); !!}"
-                                                          enctype="multipart/form-data" >
-                                                      <!--  <a name="comment{{$comment->id}}"></a> -->
+                                                          enctype="multipart/form-data">
+                                                    <!--  <a name="comment{{$comment->id}}"></a> -->
                                                         {!! csrf_field() !!}
                                                         <input type="hidden" name="parent_id"
                                                                value="{{ $comment->id }}">
-                                                        <input type="hidden" name="author_id" value="{{ $comment->user_id }}">
+                                                        <input type="hidden" name="author_id"
+                                                               value="{{ $comment->user_id }}">
                                                         <input type="hidden" name="title" value="{{ $comment->title }}">
                                                         <br>
                                                         <p>Комментарий:<br>
@@ -168,6 +166,7 @@
                                                 @endif
                                             </div>
                                         </div>
+
                                     </li>
                                 @endforeach
                             </ul>
