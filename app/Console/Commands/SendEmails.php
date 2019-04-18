@@ -44,7 +44,7 @@ class SendEmails extends Command
      */
     public function handle()
     {
-        $noFlagComments = AboutComment::whereNull('flag')->get();
+        $noFlagComments = AboutComment::whereNull('sent')->get();
         foreach ($noFlagComments as $noFlagComment) {
             $parentComment = $noFlagComment->parentComment;
             $subComment = $noFlagComment->subComment;
@@ -52,7 +52,7 @@ class SendEmails extends Command
             $mail = $userParentComment->email;
             if($mail != $subComment->author->email){
                 Mail::to($mail)->send(new TestMail($parentComment,$subComment));
-                $noFlagComment['flag'] = '1';
+                $noFlagComment['sent'] = '1';
                 $noFlagComment->save();
             }
         }

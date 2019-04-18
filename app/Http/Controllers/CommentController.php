@@ -49,13 +49,10 @@ class CommentController extends Controller
         $this->validate($request, [
             ('sub_body' . $request->get('parent_id')) => 'required|min:1',
         ]);
-        $result = Comment::addSubComment($request);
-        if($result == null){
-            $input['parent_comment_id'] = $request->get('parent_id');
-            $subComment = Comment::latest()->first();
-            $input['sub_comment_id'] = $subComment -> id;
-            AboutComment::create($input);
-        }
+        $comment = Comment::addSubComment($request);
+        $input['parent_comment_id'] = $comment->parent_id;
+        $input['sub_comment_id'] = $comment->id;
+        AboutComment::create($input);
         return back();
     }
 

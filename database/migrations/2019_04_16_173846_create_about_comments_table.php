@@ -17,7 +17,7 @@ class CreateAboutCommentsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('parent_comment_id')->nullable();
             $table->integer('sub_comment_id')->nullable();
-            $table->integer('flag')->nullable();
+            $table->integer('sent')->nullable();
             $table->timestamps();
         });
     }

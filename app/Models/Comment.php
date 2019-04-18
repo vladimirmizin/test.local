@@ -76,7 +76,8 @@ class Comment extends Model
         $input['parent_id'] = $request->get('parent_id');
         $input['body'] = $request->get('sub_body' . $request->get('parent_id'));
         $input['title'] = $request->get('title');
-        self::create($input);
+        $comment = self::create($input);
+        return($comment);
     }
 
     public function hasImage()

@@ -10,7 +10,7 @@ class AboutComment extends Model
         'id',
         'sub_comment_id',
         'parent_comment_id',
-        'flag'
+        'sent'
     ];
     public function parentComment()
     {
@@ -22,13 +22,5 @@ class AboutComment extends Model
         return $this->belongsTo(Comment::class, 'sub_comment_id');
     }
 
-    public function parentAuthor()
-    {
-        return $this->hasManyThrough(User::class, Comment::class, 'user_id', 'id');
-    }
 
-    public function subAuthor()
-    {
-        return $this->hasManyThrough(User::class, Comment::class, 'user_id', 'id');
-    }
 }
