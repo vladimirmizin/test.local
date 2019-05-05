@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -18,16 +19,24 @@ class Comment extends Model
         'image',
         'if_send'
     ];
+    protected $appends = ['createdDate'];
+
+    public function getCreatedDateAttribute()
+    {
+        return $this->created_at->diffForHumans();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function branch()
-    {
-        return $this->belongsToMany(Branch::class, 'branch_comments', 'comment_id', 'branch_id');
-    }
+
 
     /**
      * @return bool
@@ -50,6 +59,11 @@ class Comment extends Model
     {
         return $this->hasMany(Comment::class, 'parent_id')
             ->orderByDesc('created_at');
+    }
+
+    public function last_comment()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->first();
     }
 
     public static function addComment($request)
@@ -77,7 +91,7 @@ class Comment extends Model
         $input['body'] = $request->get('sub_body' . $request->get('parent_id'));
         $input['title'] = $request->get('title');
         $comment = self::create($input);
-        return($comment);
+        return ($comment);
     }
 
     public function hasImage()
@@ -90,7 +104,7 @@ class Comment extends Model
         if ($this->hasImage()) {
             return Storage::url($this->image);
         } else {
-          return null;
+            return null;
         }
     }
 }

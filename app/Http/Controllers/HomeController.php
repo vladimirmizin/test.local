@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\AboutComment;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -15,7 +13,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
     }
 
     /**
@@ -25,8 +22,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $comments = Comment::with(['author', 'sub_comments'])->whereNull('parent_id')->get();
-        return view('home', compact('comments'));
-
+        return view('welcome');
     }
 }

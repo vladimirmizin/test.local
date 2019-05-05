@@ -13,8 +13,8 @@ $(document).ready(function () {
                 var regionsSelect = $('#region_id');
                 regionsSelect.html('')
                     .prop('disabled', false);
-
-                regionsSelect.append('<option value="0">Не выбрано</option>');
+                regionsSelect.append('<option ' +
+                    'value="0">Не выбрано</option>');
                 $.each(regions, function (key, value) {
                     regionsSelect.append('<option value="' + value.id + '">' + value.region + '</option>');
                 });
