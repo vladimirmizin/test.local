@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
 use App\Models\City;
 use App\Models\Region;
 use App\Models\User;
@@ -29,22 +30,27 @@ class AuthController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->city_id = $request->city;
         $user->password = bcrypt($request->password);
         $user->save();
         return response()->json(['user' => $user]);
     }
 
+    protected function getCountries()
+    {
+        $countries = Country::all();
+        return response()->json(['countries' => $countries]);
+    }
+
     protected function getRegions(Request $request)
     {
         $regions = Region::where('country_id', $request->get('country_id'))->get();
-
         return response()->json(['regions' => $regions]);
     }
 
     protected function getCities(Request $request)
     {
         $cities = City::where('region_id', $request->get('region_id'))->get();
-
         return response()->json(['cities' => $cities]);
     }
 

@@ -15,43 +15,38 @@
                         <div class="form-group row">
                             <!--                            <label for="name">Name</label>-->
                             <input type="text" name="name" class="form-control" v-validate="'required'"
-                                   v-model="formRegister.name" placeholder="Name">
+                                   v-model="form.name" placeholder="Name">
                             <span v-if="errors.has('name')" class="invalid-feedback" role="alert">{{ errors.first('name') }}</span>
                         </div>
                         <div class="form-group row">
                             <!--                            <label for="email">Email</label>-->
                             <input type="email" name="email" v-validate="'required|email'" class="form-control"
-                                   v-model="formRegister.email" placeholder="Email address">
+                                   v-model="form.email" placeholder="Email address">
                             <span v-if="errors.has('email')" class="invalid-feedback" role="alert">{{ errors.first('email') }}</span>
                         </div>
                         <div class="form-group row">
                             <!--                            <label for="password">Password</label>-->
                             <input type="password" name="password" class="form-control" v-validate="'required|min:6'"
-                                   v-model="formRegister.password" placeholder="password">
+                                   v-model="form.password" placeholder="password">
                             <span v-if="errors.has('password')" class="invalid-feedback" role="alert">{{ errors.first('password') }}</span>
                         </div>
                         <div class="form-group row">
-                            <div class="form-group row">
-                                <b-dropdown text="Select Country">
-                                    <b-dropdown-item v-for="country as countries"
-                                                     v-on:click="getRegions(country.id)">{{country.country}}
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </div>
-                            <div class="form-group row">
-                                <b-dropdown text="Select Region">
-                                        <b-dropdown-item  v-if="regions" v-for="region as regions"
-                                                         v-on:click="getCities(country.id)">{{region.region}}
-                                        </b-dropdown-item>
-                                </b-dropdown>
-                            </div>
-                            <div class="form-group row">
-                                <b-dropdown text="Select City">
-                                    <b-dropdown-item v-if="cities" v-for="city as cities">{{city.city}}
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </div>
+                                <b-form-select v-model="form.country" :options="countries"
+                                               @input="getRegions(form.country)">
+                                    <option v-for="country in countries" :value="country.id">{{country.country}}
+                                    </option>
+                                </b-form-select>
+                                <b-form-select v-model="form.region" :options="regions" @input="getCities(form.region)">
+                                    <option v-for="region in regions" :value="region.id">{{region.region}}
+                                    </option>
+                                </b-form-select>
+                                <b-form-select v-model="form.city" :options="cities">
+                                    <option v-for="city in cities" :value="city.id">{{city.city}}</option>
+                                </b-form-select>
+                                <br>
                         </div>
+                        <br>
+                        <br>
                         <div class="form-group row">
                             <input type="submit" value="Register" class="btn btn-outline-primary ml-auto">
                         </div>
@@ -67,23 +62,30 @@
     export default {
         data() {
             return {
-                formRegister: {
+                city: {},
+                countries: [],
+                cities: [],
+                regions: [],
+                country: {},
+                region: {},
+                error: null,
+                country_id: null,
+                form: {
+                    city: null,
                     name: '',
                     email: '',
                     password: '',
-                    countries: [],
-                    cities: [],
-                    regions: [],
-                    country: {},
-                    region: {},
-                    city: {},
-                },
-                error: null
+                }
             }
+        },
+        created() {
+            this.getCountries()
         },
         methods: {
             register() {
-                registerUser(this.$data.formRegister)
+                console.log(this.form);
+
+                registerUser(this.$data.form)
                     .then(res => {
                         console.log(res);
                         this.$store.commit("registerSuccess", res);
@@ -92,18 +94,28 @@
                     .catch(error => {
                         this.$store.commit("registerFailed", {error});
                     })
-            }, getRegions() {
+            }, getRegions(id) {
                 let vm = this
-                let uri = '/api/auth/get-regions/';
-                axios.get(uri).then(response => {
-                    vm.regions = response.data
+                let uri = '/api/auth/get-regions';
+                console.log(id)
+                axios.get(uri + '?country_id=' + id).then(response => {
+                    vm.regions = response.data.regions
                 });
-            }, getCities() {
+                console.log(vm.regions)
+            }, getCities(id) {
                 let vm = this
-                let uri = '/api/auth/get-cities/';
-                axios.get(uri).then(response => {
-                    vm.cities = response.data
+                let uri = '/api/auth/get-cities';
+                console.log(id)
+                axios.get(uri + '?region_id=' + id).then(response => {
+                    vm.cities = response.data.cities
                 });
+            }, getCountries() {
+                let vm = this
+                let uri = '/api/auth/get-countries/';
+                axios.get(uri).then(response => {
+                    vm.countries = response.data.countries
+                });
+                console.log(vm.countries);
             },
 
         },

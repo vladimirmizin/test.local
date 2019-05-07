@@ -26,9 +26,9 @@
                 errors: [],
                 comment: {},
                 postData: {},
-
             }
         },
+
         methods: {
             saveComment() {
                 axios.post('api/auth/comment/save', this.comment).then(res => {

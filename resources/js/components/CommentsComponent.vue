@@ -75,7 +75,7 @@
                                         <div><p>created by: {{ sub_comment.user.name}} | {{sub_comment.createdDate}}</p>
                                         </div>
                                         <button v-if="sub_comment.can_be_deleted" v-on:click="del(sub_comment.id)">
-                                            Удалить2
+                                            Удалить
                                         </button>
                                         <button v-if="sub_comment.can_be_modified"
                                                 id="show-modal2"
@@ -122,7 +122,6 @@
                     this.comments = response.data;
                 });
             });
-            // очистить инпуты
         },
 
         created() {

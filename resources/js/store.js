@@ -77,7 +77,7 @@ export default {
     },
     actions: {
         login(context) {
-            context.commit("login"); //коммит это значит что я передаю данные из бэкэнда  в мутацию
+            context.commit("login");
         },
         check(context) {
             context.commit('check');

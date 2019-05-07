@@ -16,7 +16,7 @@
                     <textarea class="form-control" v-model="comment.body" rows="5"></textarea>
                 </p>
                 <br>
-                <button class="btn btn-primary"  @click=" checkForm();">Добавить комментарий</button>
+                <button class="btn btn-primary" @click=" checkForm();">Добавить комментарий</button>
             </form>
         </div>
     </div>

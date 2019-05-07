@@ -47,7 +47,7 @@
         },
         methods: {
             authenticate() {
-                this.$store.dispatch('login'); //вызов экшена
+                this.$store.dispatch('login');
                 login(this.$data.formLogin)
                     .then(res => {
                         this.$store.commit("loginSuccess", res);

@@ -6,12 +6,11 @@ Route::group([
 ], function ($router) {
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
-    Route::get('get-regions', 'AuthController@getRegions');
-    Route::get('get-cities', 'AuthController@getCities');
+    Route::get('get-regions/', 'AuthController@getRegions');
+    Route::get('get-cities/', 'AuthController@getCities');
+    Route::get('get-countries', 'AuthController@getCountries');
+
     Route::group(['middleware' => 'auth:api'], function () {
-//        Route::get('dashboard', function () {
-//            return res()->json(['data' => 'Test Data']);
-//        });
         Route::post('me', 'AuthController@me');
         Route::post('comment/save', 'CommentController@store');
         Route::get('comment/show', 'CommentController@index');
