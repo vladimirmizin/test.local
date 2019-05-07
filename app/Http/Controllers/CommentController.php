@@ -23,7 +23,7 @@ class CommentController extends Controller
         return response()->json($comment->with('user')->find($newComment->id));
     }
 
-    public function addSubComment(Request $request, Comment $comment)
+    public function addSubComment(Request $request)
     {
 
         $newComment = $request->user()->comments()->create([
@@ -31,7 +31,7 @@ class CommentController extends Controller
             'title' => $request->get('title'),
             'parent_id' => $request->get('parent_id')
         ]);
-        return response()->json($comment->with('user')->find($newComment->id));
+        return response()->json($newComment->with('user')->find($newComment->id));
     }
 
     public function index()
@@ -58,9 +58,9 @@ class CommentController extends Controller
         return $comment;
     }
 
-    public function delete($id)
+    public function delete($request)
     {
-        $comment = Comment::find($id);
+        $comment = Comment::find($request);
         if ($comment->canBeDeleted()) {
             $comment->delete();
             return Comment::with('user')->whereNull('parent_id')->get();

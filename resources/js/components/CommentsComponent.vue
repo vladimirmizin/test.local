@@ -79,7 +79,7 @@
                                         </button>
                                         <button v-if="sub_comment.can_be_modified"
                                                 id="show-modal2"
-                                                @click="setVal(sub_comment.id, sub_comment.title, sub_comment.body, true)">
+                                                v-on:click="setVal(sub_comment.id, sub_comment.title, sub_comment.body, true)">
                                             Редактировать
                                         </button>
                                     </div>
