@@ -38,6 +38,7 @@ class CommentController extends Controller
     {
         $comments = Comment::with('user', 'sub_comments.user')
             ->whereNull('parent_id')
+            ->orderBy('created_at','desc')
             ->get()
             ->map(function (Comment &$comment) {
                 $comment->can_be_modified = $comment->canBeModified($comment->user->id);

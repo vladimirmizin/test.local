@@ -2211,6 +2211,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2219,8 +2221,16 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         password: ''
       },
+      RegShow: true,
       error: null
     };
+  },
+  created: function created() {
+    var vm = this;
+    setTimeout(function () {
+      console.log('123');
+      vm.RegShow = false;
+    }, 4000);
   },
   methods: {
     authenticate: function authenticate() {
@@ -78037,14 +78047,14 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
-      _c("h1", [_vm._v("Hallo from home page")]),
+      _c("h1"),
       _vm._v(" "),
       _c("router-link", { attrs: { to: { name: "login" } } }, [
         _vm._v("Login")
       ]),
       _vm._v(" "),
       _c("router-link", { attrs: { to: { name: "register" } } }, [
-        _vm._v("Registre")
+        _vm._v("Register")
       ])
     ],
     1
@@ -78074,12 +78084,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "login row justify-content-center" }, [
     _c("div", { staticClass: "col-md-6" }, [
-      _vm.registeredUser
+      _vm.registeredUser && _vm.RegShow
         ? _c("div", { staticClass: "text-success" }, [
             _vm._v(
               "Thank you " +
                 _vm._s(_vm.registeredUser.name) +
-                ".You can now login"
+                ".You can now\n            login \n        "
             )
           ])
         : _vm._e(),
@@ -94394,8 +94404,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('form-component', __webpack_require__(/*! ./components/FormComponent.vue */ "./resources/js/components/FormComponent.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('comments-component', __webpack_require__(/*! ./components/CommentsComponent.vue */ "./resources/js/components/CommentsComponent.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal', __webpack_require__(/*! ./components/CommentsComponent.vue */ "./resources/js/components/CommentsComponent.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('comments-component', __webpack_require__(/*! ./components/CommentsComponent.vue */ "./resources/js/components/CommentsComponent.vue")["default"]); // Vue.component('modal', require('./components/CommentsComponent.vue').default);
+
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('form-sub-component', __webpack_require__(/*! ./components/FormSubComponent.vue */ "./resources/js/components/FormSubComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vee_validate__WEBPACK_IMPORTED_MODULE_3__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);

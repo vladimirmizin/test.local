@@ -13,7 +13,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.component('form-component', require('./components/FormComponent.vue').default);
 Vue.component('comments-component', require('./components/CommentsComponent.vue').default);
-Vue.component('modal', require('./components/CommentsComponent.vue').default);
+// Vue.component('modal', require('./components/CommentsComponent.vue').default);
 Vue.component('form-sub-component', require('./components/FormSubComponent.vue').default);
 Vue.use(VeeValidate);
 Vue.use(VueRouter);

@@ -1,7 +1,9 @@
 <template>
     <div class="login row justify-content-center">
         <div class="col-md-6">
-            <div v-if="registeredUser" class="text-success">Thank you {{registeredUser.name}}.You can now login</div>
+            <div v-if="registeredUser && RegShow" class="text-success">Thank you {{registeredUser.name}}.You can now
+                login 
+            </div>
             <div class="card">
                 <div class="card-header">
                     <h3>Login</h3>
@@ -40,10 +42,18 @@
             return {
                 formLogin: {
                     email: '',
-                    password: ''
+                    password: '',
                 },
+                RegShow: true,
                 error: null
             }
+        },
+        created() {
+            let vm = this
+            setTimeout(function () {
+            console.log('123')
+                vm.RegShow = false
+            }, 4000)
         },
         methods: {
             authenticate() {
