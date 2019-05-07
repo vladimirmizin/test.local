@@ -1,59 +1,63 @@
 <template>
-    <div class="login row justify-content-center">
-        <div class="col-md-6">
-            <div class=”card”>
-                <div class="card-header">
-                    <h3>Register</h3>
-                </div>
-                <div class="card-body">
-                    <form @submit.prevent="register">
-                        <div class="form-group row" v-if="regError">
-                            <p class=”error”>
-                                {{regError}}
-                            </p>
-                        </div>
-                        <div class="form-group row">
-                            <!--                            <label for="name">Name</label>-->
-                            <input type="text" name="name" class="form-control" v-validate="'required'"
-                                   v-model="form.name" placeholder="Name">
-                            <span v-if="errors.has('name')" class="invalid-feedback" role="alert">{{ errors.first('name') }}</span>
-                        </div>
-                        <div class="form-group row">
-                            <!--                            <label for="email">Email</label>-->
-                            <input type="email" name="email" v-validate="'required|email'" class="form-control"
-                                   v-model="form.email" placeholder="Email address">
-                            <span v-if="errors.has('email')" class="invalid-feedback" role="alert">{{ errors.first('email') }}</span>
-                        </div>
-                        <div class="form-group row">
-                            <!--                            <label for="password">Password</label>-->
-                            <input type="password" name="password" class="form-control" v-validate="'required|min:6'"
-                                   v-model="form.password" placeholder="password">
-                            <span v-if="errors.has('password')" class="invalid-feedback" role="alert">{{ errors.first('password') }}</span>
-                        </div>
-                        <div class="form-group row">
-                                <b-form-select v-model="form.country" :options="countries"
+    <div class="content position-ref center">
+        <div class="login row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Register</h3>
+                    </div>
+                    <div class="card-body">
+                        <form @submit.prevent="register">
+                            <div class="form-group row" v-if="regError">
+                                <p class=”error”>
+                                    {{regError}}
+                                </p>
+                            </div>
+                            <div class="form-group row">
+                                <!--                            <label for="name">Name</label>-->
+                                <input type="text" name="name" class="form-control" v-validate="'required'"
+                                       v-model="form.name" placeholder="Name">
+                                <span v-if="errors.has('name')" class="invalid-feedback" role="alert">{{ errors.first('name') }}</span>
+                            </div>
+                            <div class="form-group row">
+                                <!--                            <label for="email">Email</label>-->
+                                <input type="email" name="email" v-validate="'required|email'" class="form-control"
+                                       v-model="form.email" placeholder="Email address">
+                                <span v-if="errors.has('email')" class="invalid-feedback" role="alert">{{ errors.first('email') }}</span>
+                            </div>
+                            <div class="form-group row">
+                                <!--                            <label for="password">Password</label>-->
+                                <input type="password" name="password" class="form-control"
+                                       v-validate="'required|min:6'"
+                                       v-model="form.password" placeholder="password">
+                                <span v-if="errors.has('password')" class="invalid-feedback" role="alert">{{ errors.first('password') }}</span>
+                            </div>
+                            <div class="form-group row">
+                                <b-form-select v-model="form.country"
                                                @input="getRegions(form.country)">
-                                    <option v-for="country in countries" :value="country.id">{{country.country}}
+                                    <option  v-for="country in countries" :value="country.id">{{country.country}}
                                     </option>
                                 </b-form-select>
-                                <b-form-select v-model="form.region" :options="regions" @input="getCities(form.region)">
+                            </div>
+                            <div class="form-group row">
+                                <b-form-select v-if="regions.length > 0" v-model="form.region"  @input="getCities(form.region)">
                                     <option v-for="region in regions" :value="region.id">{{region.region}}
                                     </option>
                                 </b-form-select>
-                                <b-form-select v-model="form.city" :options="cities">
+                            </div>
+                            <div class="form-group row">
+                                <b-form-select v-if="cities.length > 0" v-model="form.city">
                                     <option v-for="city in cities" :value="city.id">{{city.city}}</option>
                                 </b-form-select>
-                                <br>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="form-group row">
-                            <input type="submit" value="Register" class="btn btn-outline-primary ml-auto">
-                        </div>
+                            </div>
+                    <div class="form-group row">
+                        <input type="submit" value="Register" class="btn btn-outline-primary ml-auto">
+                    </div>
                     </form>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 <script>

@@ -1,42 +1,49 @@
 <template>
-    <div class="login row justify-content-center">
-        <div class="col-md-6">
-            <div v-if="registeredUser && RegShow" class="text-success">Thank you {{registeredUser.name}}.You can now
-                login 
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Login</h3>
-                </div>
-                <div class="card-body">
-                    <form @submit.prevent="authenticate">
-                        <div class="form-group row" v-if="authError">
-                            <p class="error">
-                                {{authError}}
-                            </p>
+    <div>
+        <br>
+        <div class="content position-ref center">
+            <div class="login row justify-content-center">
+                <div class="col-md-6">
+                    <div v-if="registeredUser && RegShow" class="text-success">Thank you {{registeredUser.name}}.You can now
+                        login
+                    </div>
+                        <div class="card">
+                        <div class="card-header">
+                            <h3>Login</h3>
                         </div>
-                        <div class="form-group row">
-                            <!--                            <label for="email">Email</label>-->
-                            <input type="email" class="form-control" v-model="formLogin.email"
-                                   placeholder="Email address">
+                        <div class="card-body">
+                            <form @submit.prevent="authenticate">
+                                <div class="form-group row" v-if="authError">
+                                    <p class="error">
+                                        {{authError}}
+                                    </p>
+                                </div>
+                                <div class="form-group row">
+                                    <!--                            <label for="email">Email</label>-->
+                                    <input type="email" class="form-control" v-model="formLogin.email"
+                                           placeholder="Email address">
+                                </div>
+                                <div class="form-group row">
+                                    <!--                            <label for="password">Password</label>-->
+                                    <input type="password" class="form-control" v-model="formLogin.password"
+                                           placeholder="password">
+                                </div>
+                                <div class="form-group row">
+                                    <input type="submit" value="Login" class="btn btn-outline-primary ml-auto">
+                                </div>
+
+                            </form>
                         </div>
-                        <div class="form-group row">
-                            <!--                            <label for="password">Password</label>-->
-                            <input type="password" class="form-control" v-model="formLogin.password"
-                                   placeholder="password">
-                        </div>
-                        <div class="form-group row">
-                            <input type="submit" value="Login" class="btn btn-outline-primary ml-auto">
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+
 </template>
 <script>
     import {login} from '../partials/auth';
-
     export default {
         data() {
             return {
@@ -51,7 +58,7 @@
         created() {
             let vm = this
             setTimeout(function () {
-            console.log('123')
+                console.log('123')
                 vm.RegShow = false
             }, 4000)
         },
@@ -63,7 +70,6 @@
                         this.$store.commit("loginSuccess", res);
                         // localStorage.setItem('token', res.data.access_token);
                         this.$router.push({path: '/dashboard'});
-
                     })
                     .catch(error => {
                         this.$store.commit("loginFailed", {error});
